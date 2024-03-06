@@ -1,0 +1,141 @@
+// Color palette
+$gray-100: #F2F2F2;
+$gray-200: #E5E7EB;
+$gray-300: #D1D5DB;
+$gray-400: #a3a3a3;
+$gray-500: #737373;
+$gray-600: #525252;
+$gray-700: #404040;
+$gray-800: #262626;
+$gray-900: #171717;
+$gray-950: #0a0a0a;
+$blue-300: #00BFFF;
+$blue-600: #0073B7;
+$blue-700: #003E64;
+$green-400: #77DD77;
+$green-600: #00703C;
+$orange-500: #FFA07A;
+
+$green-gurps: #4e6256;
+$darkgreen-gurps: #1d2d1c;
+$lightgreen-gurps: #5b715c;
+
+$yellow-gurps: #edc12c;
+$darkyellow-gurps: #f3b30e;
+$lightyellow-gurps: #f9cf47;
+
+
+
+// Media Variables
+$tablet-size: "min-width: 510px";
+$notebook-size: "min-width: 768px";
+$desktop-size: "min-width: 1024px";
+
+// Font Family Variables
+$font-primary: 'Saira', sans-serif;
+$font-title: 'Aref Ruqaa', serif;
+// $font-primary: 'Courier Prime', monospace;
+
+// Font Size Variables
+$font-10: 0.625rem;
+$font-12: 0.75rem;
+$font-14: 0.875rem;
+$font-16: 1rem;
+$font-18: 1.125rem;
+$font-20: 1.25rem;
+$font-24: 1.5rem;
+$font-28: 1.75rem;
+$font-32: 2rem;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: $font-primary;
+
+  -webkit-tap-highlight-color: transparent; // remove color highlight on tap
+
+  // Remove arrows/spinners from numeric inputs
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    appearance: textfield;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    &:focus-visible, &:focus-within, &:focus, &:active, &:target {
+      border: 0;
+      outline: 0;
+      background-color: transparent;
+    }
+  }
+
+  button {
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+    width: fit-content;
+    height: fit-content;
+    cursor: pointer;
+  }
+}
+
+.ReactModal__Content {
+  overflow: hidden !important;
+  max-width: 90%;
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+  background-color: rgba(1, 22, 7, 0.75) !important;
+  backdrop-filter: blur(2px);
+  z-index: 5;
+}
+
+.ReactModal__Overlay--after-open{
+    opacity: 1;
+}
+
+.ReactModal__Overlay--before-close{
+    opacity: 0;
+}
+
+@mixin responsive-padding($pt: 0, $pb: 0) {
+  padding: $pt 0.75rem $pb;
+
+  @media only screen and ($tablet-size) {
+    padding: $pt 4rem $pb;
+  }
+  @media only screen and ($notebook-size) {
+    padding: $pt 6rem $pb;
+  }
+  @media only screen and ($desktop-size) {
+    padding: $pt calc(8rem + 10vw) $pb;
+  }
+}
+
+@import './components/Header/Header';
+@import './components/Menu/Menu';
+@import './components/Attributes/Attributes';
+@import './components/Perks/Perks';
+@import './components/Flaws/Flaws';
+@import './components/Skills/Skills';
+@import './components/Equips/Equips';
+@import './components/Login/Login';
+@import './components/CharSelector/CharSelector';
+@import './components/LoadingSquare/LoadingSquare';
+@import './components/PointsResume/PointsResume';
+@import './components/CharacterResume/CharacterResume';
+@import './components/Character/Character';
+@import './components/PerksFlawsResume/PerksFlawsResume';
+@import './components/Footer/Footer';
+@import './components/Spells/Spells';

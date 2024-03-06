@@ -1,0 +1,68 @@
+.character-resume-container {
+  display: flex;
+  justify-content: center;
+  // gap: 1rem;
+  gap: 1.25rem;
+  width: 100%;
+
+  .image-wrapper {
+    display: flex;
+    align-self: center;
+    height: fit-content;
+    border-radius: 4px;
+    width: 4.5rem;
+    min-width: 4.5rem;
+
+    box-shadow: 6px 6px 8px #6bb372, -6px -6px 8px #86df9b;
+
+    img {
+      width: 100%;
+      border-radius: 4px;
+    }
+  }
+  .text-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: max-content;
+    gap: 0.25rem;
+
+    .text-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      label {
+        font-weight: 600;
+        font-size: $font-14;
+      }
+
+      span {
+        font-size: $font-16;
+        text-align: center;
+      }
+    }
+  }
+
+  .skeleton-span {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 0.25rem;
+
+    :first-child {
+      margin-bottom: 1.5rem;
+    }
+
+    :not(:first-child), :not(:last-child) {
+      margin-top: 0.75rem;
+    }
+  }
+
+  .skeleton-span-img {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}

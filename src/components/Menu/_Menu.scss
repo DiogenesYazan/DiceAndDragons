@@ -1,0 +1,30 @@
+.menu-container {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  margin-top: 2rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  @include responsive-padding;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .menu-item {
+    padding-bottom: 0.4rem;
+    font-size: $font-18;
+    font-weight: 600;
+    color: $gray-100;
+    text-shadow: 2px 2px 3px rgba(0,0,0,0.8);
+    cursor: pointer;
+    
+    &.selected {
+      border-bottom: 4px solid $darkyellow-gurps;
+    }
+  }
+
+  @media only screen and ($notebook-size) {
+    justify-content: center;
+  }
+}
