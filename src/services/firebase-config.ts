@@ -7,9 +7,8 @@ const firebaseConfig = {
   authDomain: "type-rpg.firebaseapp.com",
   projectId: "type-rpg",
   storageBucket: "type-rpg.appspot.com",
-  messagingSenderId: "454864399902",
-  appId: "1:454864399902:web:87d152d24c62a87897080f",
-  measurementId: "G-B6C8SQCBQD"
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_API_ID,
 };
 
 const app = initializeApp(
@@ -18,4 +17,3 @@ const app = initializeApp(
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-//add
