@@ -18,4 +18,4 @@ const app = initializeApp(
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-//addDoc
+//add
