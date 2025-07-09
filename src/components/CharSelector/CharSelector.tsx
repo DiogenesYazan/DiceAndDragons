@@ -114,16 +114,22 @@ export const CharSelector = () => {
 
   // Create user and char data
   async function registerUser({ userDocRef, userDoc }: IRegisterUserProps) {
-    if(!userDoc.exists()) {
-      console.info(`User document does not exist. Creating: ${userId}`);
-      return await setDoc(userDocRef, {});
-    } else {
-      return;
+    try {
+      if(!userDoc.exists()) {
+        console.info(`User document does not exist. Creating: ${userId}`);
+        return await setDoc(userDocRef, {});
+      } else {
+        console.info(`User document already exists: ${userId}`);
+        return;
+      }
+    } catch (error) {
+      console.error("Erro ao registrar usuário:", error);
+      throw error;
     }
   }
 
   async function registerChar({ charDocRef }: IregisterChar) {
-    return await setDoc(charDocRef, {
+    console.log("Dados do personagem:", {
       name: charName,
       gender: charGender,
       xp: Number(experienceValue),
@@ -131,86 +137,131 @@ export const CharSelector = () => {
       height: charHeight,
       weight: charWeight,
       face: charFace,
+    });
+    
+    return await setDoc(charDocRef, {
+      name: charName,
+      gender: charGender,
+      xp: Number(experienceValue),
+      age: Number(charAge) || 0,
+      height: Number(charHeight) || 0,
+      weight: Number(charWeight) || 0,
+      face: charFace,
     })
-    .then(() => console.log("Registered"))
+    .then(() => console.log("Personagem registrado com sucesso"))
     .catch((error) => {
-      console.error("Error registering user:", error);
+      console.error("Erro ao registrar personagem:", error);
+      throw error;
     });
   }
 
   async function registerCharContent({ charsCollectionRef, charDocRef }:IRegisterCharContent) {
-    const attributes = ['strength', 'dexterity', 'intelligence', 'health', 'hit-points', 'will', 'perception', 'fatigue-points', 'current-fatigue-points', 'current-hit-points']
+    try {
+      console.log("Iniciando registro do conteúdo do personagem...");
+      const attributes = ['strength', 'dexterity', 'intelligence', 'health', 'hit-points', 'will', 'perception', 'fatigue-points', 'current-fatigue-points', 'current-hit-points']
 
-    for (const attribute of attributes) {
-      await setDoc(doc(charDocRef, 'attributes', attribute), { value: "10" });
+      console.log("Criando atributos...");
+      for (const attribute of attributes) {
+        await setDoc(doc(charDocRef, 'attributes', attribute), { value: "10" });
+      }
+      await setDoc(doc(charDocRef, 'attributes', 'attributes-sum'), { value: 0 });
+
+      console.log("Criando vantagens...");
+      const perksRef = collection(charDocRef, "perks");
+      await setDoc(doc(perksRef), {
+        description: "",
+        level: 0,
+        mod: 0,
+        obs: "",
+        points: 0
+      });
+
+      console.log("Criando desvantagens...");
+      const flawsRef = collection(charDocRef, "flaws");
+      await setDoc(doc(flawsRef), {
+        description: "",
+        level: 0,
+        mod: 0,
+        obs: "",
+        points: 0
+      });
+
+      console.log("Criando perícias...");
+      const skillsRef = collection(charDocRef, "skills");
+      await setDoc(doc(skillsRef), {
+        description: "",
+        mod: 0,
+        nh: 0,
+        attRelative: "",
+        points: 0
+      });
+
+      console.log("Criando equipamentos...");
+      const equipsRef = collection(charDocRef, "equips");
+      await setDoc(doc(equipsRef), {
+        description: "",
+        weight: 0,
+        cost: 0
+      });
+
+      console.log("Criando magias...");
+      const spellsRef = collection(charDocRef, "spells");
+      await setDoc(doc(spellsRef), {
+        description: "",
+        level: 0,
+        points: 0,
+        nh: 0,
+        mod: 0,
+        obs: ""
+      });
+      
+      console.log("Conteúdo do personagem criado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao criar conteúdo do personagem:", error);
+      throw error;
     }
-    await setDoc(doc(charDocRef, 'attributes', 'attributes-sum'), { value: 0 });
-
-    const perksRef = collection(charDocRef, "perks");
-    await setDoc(doc(perksRef), {
-      description: "",
-      level: 0,
-      mod: 0,
-      obs: "",
-      points: 0
-    });
-
-    const flawsRef = collection(charDocRef, "flaws");
-    await setDoc(doc(flawsRef), {
-      description: "",
-      level: 0,
-      mod: 0,
-      obs: "",
-      points: 0
-    });
-
-    const skillsRef = collection(charDocRef, "skills");
-    await setDoc(doc(skillsRef), {
-      description: "",
-      mod: 0,
-      nh: 0,
-      attRelative: "",
-      points: 0
-    });
-
-    const equipsRef = collection(charDocRef, "equips");
-    await setDoc(doc(equipsRef), {
-      description: "",
-      weight: 0,
-      cost: 0
-    });
-
-    const spellsRef = collection(charDocRef, "spells");
-    await setDoc(doc(spellsRef), {
-      description: "",
-      level: 0,
-      points: 0,
-      nh: 0,
-      mod: 0,
-      obs: ""
-    });
   }
 
   async function createChar() {
-    const uid = uuidv4();
-    const userDocRef = doc(db, 'users', userId);
-    const userDoc = await getDoc(userDocRef);
-    const charsCollectionRef = collection(userDocRef, 'characters');
-    const charDocRef = doc(charsCollectionRef, uid);
+    try {
+      console.log("Iniciando criação do personagem...");
+      console.log("userId:", userId);
+      
+      if (!userId) {
+        console.error("userId não encontrado!");
+        return;
+      }
+      
+      const uid = uuidv4();
+      console.log("UUID gerado:", uid);
+      
+      const userDocRef = doc(db, 'users', userId);
+      const userDoc = await getDoc(userDocRef);
+      const charsCollectionRef = collection(userDocRef, 'characters');
+      const charDocRef = doc(charsCollectionRef, uid);
 
-    await registerUser({ userDocRef, userDoc });
-    await registerChar({ charDocRef });
-    await registerCharContent({ charsCollectionRef, charDocRef });
+      console.log("Registrando usuário...");
+      await registerUser({ userDocRef, userDoc });
+      
+      console.log("Registrando personagem...");
+      await registerChar({ charDocRef });
+      
+      console.log("Registrando conteúdo do personagem...");
+      await registerCharContent({ charsCollectionRef, charDocRef });
 
-    setCharName("");
-    setCharGender("");
-    setExperienceValue("");
-    setCharAge("");
-    setCharHeight("");
-    setCharWeight("");
-    setCharFace("");
-    setCharSelectorRefresh(current => !current);
-    setIsModalOpen(false);
+      console.log("Personagem criado com sucesso!");
+      setCharName("");
+      setCharGender("");
+      setExperienceValue("");
+      setCharAge("");
+      setCharHeight("");
+      setCharWeight("");
+      setCharFace("");
+      setCharSelectorRefresh(current => !current);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Erro ao criar personagem:", error);
+    }
   }
 
   async function deleteChar(id: string) {
@@ -404,7 +455,16 @@ export const CharSelector = () => {
             placeholder="Insira o peso"
             value={charWeight}
           />
-          <button disabled={newCharButtonDisabled} onClick={() => createChar()}>Criar personagem</button>
+          <button 
+            disabled={newCharButtonDisabled} 
+            onClick={() => {
+              console.log("Botão 'Criar personagem' clicado!");
+              console.log("Botão desabilitado:", newCharButtonDisabled);
+              createChar();
+            }}
+          >
+            Criar personagem
+          </button>
         </div>
 
         {/* Face Char Selector */}

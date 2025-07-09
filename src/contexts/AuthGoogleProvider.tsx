@@ -58,18 +58,28 @@ export const AuthGoogleProvider = ({ children }: { children: ReactNode }) => {
   })
 
   async function handleGoogleSignIn() {
-    await signInWithPopup(auth, provider)
-    .then((result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      setUserCredential(credential?.accessToken);
-    })
-    .catch((error) => {
+    try {
+      await signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        setUserCredential(credential?.accessToken);
+      })
+    } catch (error: any) {
       const errorCode = error.code;
       const errorMessage = error.message;
       const email = error.email;
       const credential = GoogleAuthProvider.credentialFromError(error);
-      console.log(credential)
-    });
+      
+      console.error("Erro no login:", {
+        errorCode,
+        errorMessage,
+        email,
+        credential
+      });
+      
+      // Se o popup falhar, você pode tentar redirect como fallback
+      // await signInWithRedirect(auth, provider);
+    }
   }
 
   function handleGoogleSignOut() {
